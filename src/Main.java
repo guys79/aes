@@ -62,5 +62,17 @@ public class Main {
     {
         String prefix = "Java –jar aes.jar -b";
         return prefix.equals(command.substring(0,prefix.length()));
+
+    }
+
+    public static void Test(){
+        byte b1,b2;
+        b1=0;
+        b2=1;
+        byte b3= (byte) ((byte)b1^b2);
+        System.out.println(b1^b2);
+        System.out.println(b2^b1);
+        System.out.println(b1^b1);
+        System.out.println(b2^b2);
     }
 }
