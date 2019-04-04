@@ -7,6 +7,11 @@ public class Main {
     public static void main(String[] args) {
         //activate(args[0]);//Executing the command line
 
+        //Hack hack = new Hack("Java –jar aes.jar -b –m C:\\Users\\guys7\\Downloads\\AES3_test_files\\message_short –c C:\\Users\\guys7\\Downloads\\AES3_test_files\\key_long -o < output-path> ");
+        //00001100
+        //00001101
+        //00000001
+
 
     }
 
