@@ -1,4 +1,3 @@
-package Encrypt_Decrypt;
 
 public class Decryption {
     public byte[] DecryptAES(byte[] Cypher,byte[]k1,byte[]k2,byte[]k3){
@@ -17,11 +16,19 @@ public class Decryption {
         return plaintext;
     }
 
+    /**
+     *
+     * @param text
+     * @return shift rows to text- aes
+     */
     private byte[] ShiftRows_reversed(byte[] text) {
         byte[][] text_arrays=OneToArrays(text);
-        //todo return the array after rows shift
-        return new byte[0];
+        for (int i = 0; i <4 ; i++) {
+            text_arrays[i]=ShiftRight(text_arrays[i],i);
+        }
+        return ArraysToOne(text_arrays);
     }
+
 
     /**
      *
@@ -34,7 +41,23 @@ public class Decryption {
             text[i]=(byte)(text[i]^key[i]);
         }
     }
-
+    /**
+     *
+     * @param row the row to shift
+     * @param counter how many time shify
+     * @return row after shift right by counter times
+     */
+    private byte[] ShiftRight(byte[] row, int counter) {
+        while (counter > 0) {
+            byte temp =row[row.length-1];
+            for (int i = row.length-2; i > 0; i--) {
+                row[i+1] =row[i];
+            }
+            row[0] = temp;
+            counter--;
+        }
+        return row;
+    }
     /**
      *
      * @param plainText- array of 16 bytes(128 bits)
