@@ -65,7 +65,7 @@ public class Encryption {
     private byte[] ArraysToOne(byte[][] cypher_array) {
         byte [] res=new byte[16];
         int counter=0;
-        for (int i = 0; i <8 ; i++) {
+        for (int i = 0; i <4 ; i++) {
             for (int j = 0; j <4 ; j++) {
                 res[counter]=cypher_array[i][j];
                 counter+=1;

@@ -7,8 +7,17 @@ public class Main {
 
 
         //activate(args);//Executing the command line
-        TestEncryption();
+        //TestEncryption();
+        TestEqual();
 
+    }
+
+    private static void TestEqual() {
+        String folder="C:\\Users\\AMIT MOSHE\\Desktop\\אוניברסיטה\\סמסטר ו\\אבטחת מידע\\עבודה 1";
+        byte[] a1=RWFromFile.read(folder+"\\test");
+        byte[] a2=RWFromFile.read(folder+"\\cipher_long");
+        for(int i=0;i<a1.length;i++)
+            System.out.println(a1[i]==a2[i]);
     }
 
     private static void TestEncryption() {

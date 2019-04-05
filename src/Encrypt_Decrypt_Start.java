@@ -3,9 +3,8 @@ import java.util.List;
 
 public class Encrypt_Decrypt_Start {
 
-    //TODO: 1.figure out sizes- tells that keys is 96 bytes but there is 48.
-    //TODO: 2.blocks: only in reading part (written wierd on files) or in the add round key and atc..
-    //TODO: 3. if 2 is true- change enc dec to work with block function of guy.
+    //TODO: 1. change in en/dec to turn into blocks with guy's function, then call to the triply array in place 1
+    //TODO: 2. add function to turn blocks into array in order of columns
 
 
     /**
@@ -51,10 +50,10 @@ public class Encrypt_Decrypt_Start {
      */
     private static void Write_enc_dec(List<byte[]> enc_dec_seperated, String fullPathToOutputFile) {
         //get the blocks to 1 array
-        byte [] msg=new byte[128*enc_dec_seperated.size()];
+        byte [] msg=new byte[16*enc_dec_seperated.size()];
         int counter=0;
         for(int i=0; i<enc_dec_seperated.size();i++){
-            for(int j=0;j<128;j++){
+            for(int j=0;j<16;j++){
                 msg[counter]=enc_dec_seperated.get(i)[j];
             }
         }
@@ -71,12 +70,12 @@ public class Encrypt_Decrypt_Start {
         List<byte[]> seprated=new ArrayList<>();
         int counter=text.length/128;
         int start=0;
-        int end=31;
+        int end=15;
         for(int i=0;i<counter;i++){
             byte[] block=getBlockMsg(text,start,end);
             seprated.add(block);
-            start+=32;
-            end+=32;
+            start+=16;
+            end+=16;
         }
         return seprated;
 
@@ -90,16 +89,16 @@ public class Encrypt_Decrypt_Start {
      */
     private static byte[][] getKeys(String pathToKeyFile) throws Exception {
         byte[] keys= RWFromFile.read(pathToKeyFile);
-        if(keys.length==96) {
-            byte[] key1 = getBlockMsg(keys, 0, 31);
-            byte[] key2 = getBlockMsg(keys, 32, 63);
-            byte[] key3 = getBlockMsg(keys, 64, 95);
+        if(keys.length==48) {
+            byte[] key1 = getBlockMsg(keys, 0, 15);
+            byte[] key2 = getBlockMsg(keys, 16, 31);
+            byte[] key3 = getBlockMsg(keys, 32, 47);
             byte[][]keys_seperated={key1,key2,key3};
             return keys_seperated;
         }
         else{
             System.out.println(keys.length);
-            throw new Exception("Keys File doesn't have the needed parameters- not 384 bits-96 bytes!");
+            throw new Exception("Keys File doesn't have the needed parameters- not 384 bits-48 bytes!");
         }
     }
 
@@ -111,7 +110,7 @@ public class Encrypt_Decrypt_Start {
      * @return get 1 key from all keys
      */
     private static byte[] getBlockMsg(byte[] fullmsg, int start, int end) {
-        byte [] block=new byte[32];
+        byte [] block=new byte[16];
         int c=0;
         for(int i=start;i<=end;i++){
             block[c]=fullmsg[i];
