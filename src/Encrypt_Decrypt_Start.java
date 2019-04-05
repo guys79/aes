@@ -3,6 +3,11 @@ import java.util.List;
 
 public class Encrypt_Decrypt_Start {
 
+    //TODO: 1.figure out sizes- tells that keys is 96 bytes but there is 48.
+    //TODO: 2.blocks: only in reading part (written wierd on files) or in the add round key and atc..
+    //TODO: 3. if 2 is true- change enc dec to work with block function of guy.
+
+
     /**
      *
      * @param args-[ -e/-d] [<path-to-key-file >] [<path-to-input-file>] [<path-to-output-file>]
@@ -66,12 +71,12 @@ public class Encrypt_Decrypt_Start {
         List<byte[]> seprated=new ArrayList<>();
         int counter=text.length/128;
         int start=0;
-        int end=127;
+        int end=31;
         for(int i=0;i<counter;i++){
             byte[] block=getBlockMsg(text,start,end);
             seprated.add(block);
-            start+=128;
-            end+=128;
+            start+=32;
+            end+=32;
         }
         return seprated;
 
@@ -85,15 +90,16 @@ public class Encrypt_Decrypt_Start {
      */
     private static byte[][] getKeys(String pathToKeyFile) throws Exception {
         byte[] keys= RWFromFile.read(pathToKeyFile);
-        if(keys.length==384) {
-            byte[] key1 = getBlockMsg(keys, 0, 127);
-            byte[] key2 = getBlockMsg(keys, 128, 255);
-            byte[] key3 = getBlockMsg(keys, 256, 383);
+        if(keys.length==96) {
+            byte[] key1 = getBlockMsg(keys, 0, 31);
+            byte[] key2 = getBlockMsg(keys, 32, 63);
+            byte[] key3 = getBlockMsg(keys, 64, 95);
             byte[][]keys_seperated={key1,key2,key3};
             return keys_seperated;
         }
         else{
-            throw new Exception("Keys File doesn't have the needed parameters- not 384 bytes!");
+            System.out.println(keys.length);
+            throw new Exception("Keys File doesn't have the needed parameters- not 384 bits-96 bytes!");
         }
     }
 
@@ -105,7 +111,7 @@ public class Encrypt_Decrypt_Start {
      * @return get 1 key from all keys
      */
     private static byte[] getBlockMsg(byte[] fullmsg, int start, int end) {
-        byte [] block=new byte[128];
+        byte [] block=new byte[32];
         int c=0;
         for(int i=start;i<=end;i++){
             block[c]=fullmsg[i];

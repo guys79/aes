@@ -15,8 +15,8 @@ public class Main {
         String folder="C:\\Users\\AMIT MOSHE\\Desktop\\אוניברסיטה\\סמסטר ו\\אבטחת מידע\\עבודה 1";
         String []args=new String[4];
         args[0]="-e";
-        args[1]=folder+"\\key_short";
-        args[2]=folder+"\\message_short";
+        args[1]=folder+"\\key_long";
+        args[2]=folder+"\\message_long";
         args[3]=folder+"\\test";
         try {
             Encrypt_Decrypt_Start.Start(args);
