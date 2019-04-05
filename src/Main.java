@@ -6,9 +6,23 @@ public class Main {
     public static void main(String[] args) {
 
 
-        activate(args);//Executing the command line
+        //activate(args);//Executing the command line
+        TestEncryption();
 
+    }
 
+    private static void TestEncryption() {
+        String folder="C:\\Users\\AMIT MOSHE\\Desktop\\אוניברסיטה\\סמסטר ו\\אבטחת מידע\\עבודה 1";
+        String []args=new String[4];
+        args[0]="-e";
+        args[1]=folder+"\\key_short";
+        args[2]=folder+"\\message_short";
+        args[3]=folder+"\\test";
+        try {
+            Encrypt_Decrypt_Start.Start(args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -31,7 +45,11 @@ public class Main {
         }
         else
         {
-            // TODO: 03/04/2019 Summon encrypt/decrypt class
+            try {
+                Encrypt_Decrypt_Start.Start(importedCommand);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }//TODO where to catch and what to do?
         }
     }
 
