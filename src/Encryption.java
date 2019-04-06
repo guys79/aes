@@ -4,13 +4,13 @@ public class Encryption {
     public byte[] EncryptAES(byte[] PlainText,byte[]k1,byte[]k2,byte[]k3){
         byte[] []cypher= OneToArrays(PlainText);
         //round 1
-        ShiftRows(cypher);
+        cypher=ShiftRows(cypher);
         cypher=AddRoundKey(cypher,k1);
         //round 2
-        ShiftRows(cypher);
+        cypher=ShiftRows(cypher);
         cypher=AddRoundKey(cypher,k2);
         //round 3
-        ShiftRows(cypher);
+        cypher=ShiftRows(cypher);
         cypher=AddRoundKey(cypher,k3);
 
         return ArraysToOne(cypher);
@@ -21,10 +21,12 @@ public class Encryption {
      * @param text
      * this function shift rows - AES
      */
-    private void ShiftRows(byte[][] text){
+    private byte[][] ShiftRows(byte[][] text){
+        byte[][]res=new byte[4][4];
         for (int i = 0; i <4 ; i++) {
-            text[i]=ShiftLeft(text[i],i);
+            res[i]=ShiftLeft(text[i],i);
         }
+        return res;
     }
 
     /**
@@ -33,7 +35,7 @@ public class Encryption {
      */
     private byte[][] AddRoundKey(byte[][] cypher, byte[] key) {
         byte[]temp=ArraysToOne(cypher);
-        for (int i = 0; i <cypher.length ; i++) {
+        for (int i = 0; i <temp.length ; i++) {
             temp[i]=(byte)(temp[i]^key[i]);
         }
         return OneToArrays(temp);
@@ -45,16 +47,8 @@ public class Encryption {
      * @return 2 dim array of 4*4 bytes.
      */
     private byte[][] OneToArrays(byte[] plainText) {
-        byte[][]res= new byte[4][4];
-        int counter=0;
-        for (int i = 0; i <4 ; i++) {
-            for (int j = 0; j <4 ; j++) {
-                res[i][j]=plainText[counter];
-                counter+=1;
-            }
-
-        }
-        return res;
+        byte[][][]res= RWFromFile.createBlocks(plainText);
+        return res[0];
     }
 
     /**
@@ -67,7 +61,7 @@ public class Encryption {
         int counter=0;
         for (int i = 0; i <4 ; i++) {
             for (int j = 0; j <4 ; j++) {
-                res[counter]=cypher_array[i][j];
+                res[counter]=cypher_array[j][i];
                 counter+=1;
             }
         }

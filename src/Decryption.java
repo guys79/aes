@@ -3,14 +3,14 @@ public class Decryption {
     public byte[] DecryptAES(byte[] Cypher,byte[]k1,byte[]k2,byte[]k3){
         byte[]plaintext=Cypher;
         //round 1
-        AddRoundKey(plaintext,k3);
+        plaintext=AddRoundKey(plaintext,k3);
         plaintext=ShiftRows_reversed(plaintext);
         //round 2
-        AddRoundKey(plaintext,k2);
-        ShiftRows_reversed(plaintext);
+        plaintext=AddRoundKey(plaintext,k2);
+        plaintext=ShiftRows_reversed(plaintext);
         //round 3
-        AddRoundKey(plaintext,k1);
-        ShiftRows_reversed(plaintext);
+        plaintext=AddRoundKey(plaintext,k1);
+        plaintext=ShiftRows_reversed(plaintext);
 
 
         return plaintext;
@@ -36,10 +36,12 @@ public class Decryption {
      * @param key
      * cypher xor key
      */
-    private void AddRoundKey(byte[] text, byte[] key) {
+    private byte[] AddRoundKey(byte[] text, byte[] key) {
+        byte[] temp=new byte[16];
         for (int i = 0; i <text.length ; i++) {
-            text[i]=(byte)(text[i]^key[i]);
+            temp[i]=(byte)(text[i]^key[i]);
         }
+        return temp;
     }
     /**
      *
@@ -50,7 +52,7 @@ public class Decryption {
     private byte[] ShiftRight(byte[] row, int counter) {
         while (counter > 0) {
             byte temp =row[row.length-1];
-            for (int i = row.length-2; i > 0; i--) {
+            for (int i = row.length-2; i >= 0; i--) {
                 row[i+1] =row[i];
             }
             row[0] = temp;
@@ -64,16 +66,8 @@ public class Decryption {
      * @return 2 dim array of 4*4 bytes.
      */
     private byte[][] OneToArrays(byte[] plainText) {
-        byte[][]res= new byte[4][4];
-        int counter=0;
-        for (int i = 0; i <4 ; i++) {
-            for (int j = 0; j <4 ; j++) {
-                res[i][j]=plainText[counter];
-                counter+=1;
-            }
-
-        }
-        return res;
+        byte[][][]res= RWFromFile.createBlocks(plainText);
+        return res[0];
     }
 
     /**
@@ -86,7 +80,7 @@ public class Decryption {
         int counter=0;
         for (int i = 0; i <4 ; i++) {
             for (int j = 0; j <4 ; j++) {
-                res[counter]=cypher_array[i][j];
+                res[counter]=cypher_array[j][i];
                 counter+=1;
             }
         }
