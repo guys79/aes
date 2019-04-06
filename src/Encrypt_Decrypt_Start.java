@@ -55,6 +55,7 @@ public class Encrypt_Decrypt_Start {
         for(int i=0; i<enc_dec_seperated.size();i++){
             for(int j=0;j<16;j++){
                 msg[counter]=enc_dec_seperated.get(i)[j];
+                counter+=1;
             }
         }
         //write the full msg
@@ -67,18 +68,29 @@ public class Encrypt_Decrypt_Start {
      * @return text cut to 128 byte blocks
      */
     private static List<byte[]> CutToBlocks(byte[] text) {
-        List<byte[]> seprated=new ArrayList<>();
-        int counter=text.length/128;
-        int start=0;
-        int end=15;
-        for(int i=0;i<counter;i++){
-            byte[] block=getBlockMsg(text,start,end);
-            seprated.add(block);
-            start+=16;
-            end+=16;
+        byte[][][] ret= RWFromFile.createBlocks(text);
+        List<byte[]>blocks=new ArrayList<>();
+        for(int i=0;i<ret.length;i++){
+            byte[]block=ArraysToOne(ret[i]);
+            blocks.add(block);
         }
-        return seprated;
-
+        return blocks;
+    }
+    /**
+     *
+     * @param cypher_array 2 dim array of 4*4 bytes
+     * @return 1 dim array of 16 bytes
+     */
+    private static byte[] ArraysToOne(byte[][] cypher_array) {
+        byte [] res=new byte[16];
+        int counter=0;
+        for (int i = 0; i <4 ; i++) {
+            for (int j = 0; j <4 ; j++) {
+                res[counter]=cypher_array[j][i];
+                counter+=1;
+            }
+        }
+        return res;
     }
 
     /**
@@ -89,10 +101,11 @@ public class Encrypt_Decrypt_Start {
      */
     private static byte[][] getKeys(String pathToKeyFile) throws Exception {
         byte[] keys= RWFromFile.read(pathToKeyFile);
-        if(keys.length==48) {
-            byte[] key1 = getBlockMsg(keys, 0, 15);
-            byte[] key2 = getBlockMsg(keys, 16, 31);
-            byte[] key3 = getBlockMsg(keys, 32, 47);
+        if(keys.length==48){
+            byte[][][]keys_blocks=RWFromFile.createBlocks(keys);
+            byte[] key1 = ArraysToOne(keys_blocks[0]);
+            byte[] key2 = ArraysToOne(keys_blocks[1]);
+            byte[] key3 = ArraysToOne(keys_blocks[2]);
             byte[][]keys_seperated={key1,key2,key3};
             return keys_seperated;
         }
@@ -101,21 +114,4 @@ public class Encrypt_Decrypt_Start {
             throw new Exception("Keys File doesn't have the needed parameters- not 384 bits-48 bytes!");
         }
     }
-
-    /**
-     *
-     * @param fullmsg
-     * @param start
-     * @param end
-     * @return get 1 key from all keys
-     */
-    private static byte[] getBlockMsg(byte[] fullmsg, int start, int end) {
-        byte [] block=new byte[16];
-        int c=0;
-        for(int i=start;i<=end;i++){
-            block[c]=fullmsg[i];
-        }
-        return block;
-    }
-
 }
