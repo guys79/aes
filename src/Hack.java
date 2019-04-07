@@ -148,8 +148,6 @@ public class Hack {
         }
 
 
-
-
         this.key3[row][col3] = xor(xor(xor(cBlock[row][col3],mBlock[row][col]),this.key1[row][col1]),this.key2[row][col2]);
 
         if(this.key3[row][col3]!=(byte)0)

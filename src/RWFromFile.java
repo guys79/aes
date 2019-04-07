@@ -1,5 +1,6 @@
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * This class is responsible to read/write from a file that contains bytes
@@ -16,10 +17,11 @@ public class RWFromFile {
      */
     public static byte[] read(String path)
     {
+        System.out.println(path);
 
         byte[] fileContent = null;
         try {
-            fileContent = Files.readAllBytes(new File(path).toPath());
+            fileContent = Files.readAllBytes(Paths.get(path));
         } catch (IOException e) {
             e.printStackTrace();
         }
