@@ -12,8 +12,6 @@ public class Main {
 
 
 
-    }
-
     private static void TestDecryption() {
         String folder="C:\\Users\\AMIT MOSHE\\Desktop\\אוניברסיטה\\סמסטר ו\\אבטחת מידע\\עבודה 1";
         String []args=new String[4];
@@ -81,16 +79,23 @@ public class Main {
 
         if(hackOrNot(importantCommand[0]))
         {
-            Hack hack = new Hack(importantCommand);
-            hack.hack();
+            try
+            {
+                Hack hack = new Hack(importantCommand);
+                hack.hack();
+            }
+            catch (Exception e)
+            {
+
+            }
         }
         else
         {
             try {
-                Encrypt_Decrypt_Start.Start(importedCommand);
+                Encrypt_Decrypt_Start.Start(importantCommand);
             } catch (Exception e) {
-                e.printStackTrace();
-            }//TODO where to catch and what to do?
+                //e.printStackTrace();
+            }
         }
     }
 
@@ -101,7 +106,7 @@ public class Main {
      * @param command - The command
      */
     public static void createImportentCommand(String [] buffer, String [] command) {
-        buffer[0] = command[3];
+        buffer[0] = command[0];
         String firstPathSign = "-i";
         String secondPathSign = "-o";
 
@@ -113,7 +118,7 @@ public class Main {
         buffer[2] = "";
         buffer[3] = "";
 
-        int index = 5;
+        int index = 2;
 
 
         while (!command[index].equals(firstPathSign)) {
